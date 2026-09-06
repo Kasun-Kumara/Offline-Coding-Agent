@@ -1,5 +1,6 @@
 import ollama
-from tools import write_file, execute_python, setup_workspace
+from tools import write_file, execute_python, setup_workspace, read_file, install_package
+
 
 # (Keep the exact same tool_schemas and available_tools as before)
 tool_schemas = [
@@ -31,12 +32,42 @@ tool_schemas = [
         'required': ['filename']
       }
     }
+  },
+  {
+    'type': 'function',
+    'function': {
+      'name': 'read_file',
+      'description': 'Reads the contents of a file in the workspace.',
+      'parameters': {
+        'type': 'object',
+        'properties': {
+          'filename': {'type': 'string', 'description': 'Name of the file to read (e.g., script.py)'}
+        },
+        'required': ['filename']
+      }
+    }
+  },
+  {
+    'type': 'function',
+    'function': {
+      'name': 'install_package',
+      'description': 'Installs a Python package using pip.',
+      'parameters': {
+        'type': 'object',
+        'properties': {
+          'package_name': {'type': 'string', 'description': 'Name of the package to install (e.g., requests, numpy)'}
+        },
+        'required': ['package_name']
+      }
+    }
   }
 ]
 
 available_tools = {
     "write_file": write_file,
-    "execute_python": execute_python
+    "execute_python": execute_python,
+    "read_file": read_file,
+    "install_package": install_package
 }
 
 def interactive_agent():

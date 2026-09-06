@@ -36,3 +36,32 @@ def execute_python(filename: str) -> str:
             return f"Error occurred:\n{result.stderr}"
     except Exception as e:
         return f"Execution failed: {str(e)}"
+    
+def read_file(filename: str) -> str:
+    """Reads the contents of a file in the workspace."""
+    filepath = os.path.join(WORKSPACE_DIR, filename)
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return f"File contents of {filename}:\n{content}"
+    except FileNotFoundError:
+        return f"Error: The file {filename} does not exist."
+    except Exception as e:
+        return f"Error reading file: {str(e)}"
+
+def install_package(package_name: str) -> str:
+    """Installs a Python package using pip."""
+    try:
+        # Run pip install and capture the output
+        result = subprocess.run(
+            ['pip', 'install', package_name],
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        if result.returncode == 0:
+            return f"Successfully installed {package_name}:\n{result.stdout}"
+        else:
+            return f"Failed to install {package_name}:\n{result.stderr}"
+    except Exception as e:
+        return f"Pip execution failed: {str(e)}"
